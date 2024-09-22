@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import './styles.css';  // Your styles
+import './styles.css';  
 
 const App = () => {
     const [jsonInput, setJsonInput] = useState('');
     const [response, setResponse] = useState(null);
-    const [selectedOptions, setSelectedOptions] = useState([]);  // Selected filters
+    const [selectedOptions, setSelectedOptions] = useState([]); 
     const [inputError, setInputError] = useState('');
     const [loading, setLoading] = useState(false);
 
-    // Update document title when roll number is received
+    
     useEffect(() => {
         if (response && response.roll_number) {
-            document.title = response.roll_number;  // Set the roll number as the title
+            document.title = response.roll_number;  
         }
     }, [response]);
 
@@ -19,10 +19,10 @@ const App = () => {
         const value = e.target.value;
         setJsonInput(value);
 
-        // Check if the input is valid JSON
+       
         try {
             JSON.parse(value);
-            setInputError('');  // Clear the error if the input is valid
+            setInputError(''); 
         } catch (error) {
             setInputError('Invalid JSON format');
         }
@@ -36,16 +36,16 @@ const App = () => {
 
         setLoading(true);
         try {
-            const parsedInput = JSON.parse(jsonInput);  // Validates JSON input
-            const result = await fetch('http://localhost:3000/bfhl', {
+            const parsedInput = JSON.parse(jsonInput);  
+            const result = await fetch('https://bfhl-backend-gamma.vercel.app/bfhl', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(parsedInput),  // Send parsed JSON to backend
+                body: JSON.stringify(parsedInput),  
             });
             const data = await result.json();
-            setResponse(data);  // Set the response state
+            setResponse(data); 
         } catch (error) {
             alert('Invalid JSON');
         } finally {
@@ -53,7 +53,7 @@ const App = () => {
         }
     };
 
-    // Handle checkbox selection
+    
     const handleCheckboxChange = (option) => {
         if (selectedOptions.includes(option)) {
             setSelectedOptions(selectedOptions.filter(item => item !== option));
@@ -62,11 +62,11 @@ const App = () => {
         }
     };
 
-    // Render response based on selected filters or show all if no filter is selected
+   
     const renderResponse = () => {
         if (!response) return null;
 
-        const showAll = selectedOptions.length === 0;  // Check if no filters are applied
+        const showAll = selectedOptions.length === 0;  
 
         return (
             <div className="response-container">
@@ -96,7 +96,7 @@ const App = () => {
                 {loading ? "Loading..." : "Submit"}
             </button>
 
-            {/* Replace the dropdown with checkboxes for easy multiple selection */}
+            
             <div className="checkboxes">
                 <label>
                     <input
@@ -124,7 +124,7 @@ const App = () => {
                 </label>
             </div>
 
-            {/* Render the filtered response or all data if no filter is selected */}
+            
             {renderResponse()}
         </div>
     );
